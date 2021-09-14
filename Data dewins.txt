@@ -1,0 +1,1052 @@
+June 4th, 2021
+
+85% of smartphones are based on linux. Top 500 supercomputers work on Linux.
+Kernel processes commands by user through the shell. 
+Terminals are software which emulates CLI
+
+Options for running command:
+ls for list command
+-lah means list long form
+/tmp means temp directory
+
+Finding Help:
+man pages and info are the help systems available.
+man for manual pages.
+man-db Debian package provides man commands.
+manpags-dev Debian package provides system manual.
+
+Man pages have 9 parts.
+1. Executable program 2. System calls 3. Library files 4. Special files 5. File formats and conventions.
+6. Games 7. Miscellaneous 8. Systtem administraton commands. Kernel routines(Non Standard)
+
+man pages have certain sections
+CONVENTIONAL NOT NECCESSARY
+AUTHORS		BUGS		CONFIGURATION	CONFORMING TO
+DESCRIPTIONS	ENVIRONMENT	ERROR		EXAMPLE
+EXIT STATUS	FILES		NAME		NOTES
+OPTIONS		RETURN VALUE	SEE ALSO	SYNOPSIS
+VERSIONS
+(ALL MAY BE AND MAY NOT BE PRESENT)
+Command to display sections: $ man man | grev -v '^' | grep -v '^$'
+
+USEFUL MAN COMMANDS:
+search on keyword:
+$ man -k xargs
+xrags(1) - build and execte comand lines from standar...
+shows
+command name: xargs
+man secton: 1
+short intro: build and execute command lines from standar...
+
+June 05, 2021
+
+User management:
+Create a user and then we can
+change psswrd
+lock unlock
+chnge a grp member
+and also delete the user
+/etc/passwd: primary user info, excep password
+/etc/shadow: salted psswrd (saltes password means it means it will show not whole password, it will show hashed passwords
+and also passwors with prefix and suffixes.
+/etc/groups: system groups and membership information. 
+
+/etc/passwd contains:(can also be used by man 5 passwd)
+user name, masked password, user id, primary group id etc...
+
+shadow file contains: (* says there is no password) (! means deleted password for the user)
+login name, salted password, date of last passwrd change, min and max password age
+password warning period, password insctivity period, account expiry date, reserved field
+shadow can be readable by root only.
+
+password nahi hash value store hoti hai.
+grep for pattern matching, aage ke weeks me pdhaya jayega.
+
+Useful commands:
+passwd: change password
+id: get uid, gid and supplimentary groups
+getent: get entries from nsswitch libraries.
+(grep and getent se same information)
+
+To login with new user: 
+su- new user name
+then password dalo
+ps -u gives process command which are running currently.
+
+Root user:
+special user having user ID 0.
+has unrestricted accss to filesystem 
+is used to administer the system
+it can:
+	change ownership and permissions
+	manage installed software packages
+	manage system services
+	can run programs on priviledged port (<1024)
+rights can be delegated with sudo.
+su require password
+but sudo doesn't require password.
+
+setuid and setgid:
+configured by chmod command on executables.
+allows priviledge elevation to specific program
+
+chgrp changes group ownership of file(s)
+usermod command updates group membership.
+clear for clearing the screen.
+Que: How did we get user id and group id?
+Answer: By id command.
+
+June 06, 2021
+
+How to mark attendance: ctrl+b 1 then sudo mark-my-attendence.
+Exit that screen by using Ctrl+b 0.
+
+Now session starts:
+
+Files and Processes:
+Computing is all about processing data.
+File=Metadata + Data
+metadata: Info about the file and data: Content of the file.
+
+for each file metadata is stored in i-node. Data is stored in data blocks.
+
+File System:
+Stores Multiple files.
+Created on partition or disk.
+Can be imagined as:
+iiiiiiiiiiiiiiiiiii
+iiiiiiiiiiiiiiiiiii
+ddddddddddddddddddd
+ddddddddddddddddddd
+ddddddddddddddddddd
+ddddddddddddddddddd
+ddddddddddddddddddd
+
+each is represents an i-node
+each d represents a data block.
+
+Disk PArtition scheme and partition:
+Dis+ Partition table+Partitions.
+
+Create partition on disk using disk partitioning schemes (are of types: MSDOS, GPT etc.)
+Disk as one partiton table and then partitions P1 P2 P3...
+MSDOS HAVE 4 PARTITIOINS
+GPT have 128 partitions.
+
+Disk Management Commands:
+lsblk- list disks or block devices
+blkid- list volumes/partitions
+fdisk- partition disk (be careful it can delete OS)
+mkfs.ext4: create EXT4 filesystem.
+
+Filesystem physical layout:
+Supernlock- Into about i node bit map and data block bitmap
+i node bitmap
+i node
+data block bit map
+data blocks
+
+DIRENT: File name + i-node number + type
+Special directory file /
+Two special dirents:
+.- CUrrent directory
+..-Parent directory.
+
+Work to do:
+Use list directories by
+$ ls -ldi / /. /.. /home/. /home/..
+
+(to know present directory we user pwd command)
+
+TYPES OF FILES:
+
+Regular file: files containing user created data on disk
+Directory files: file containing dirents
+links: symbolic links
+FIFO: special in memory files
+socket: network connections
+block device: hardware devices operating in block mode
+character dev.: hardware devices operating in character mode
+(ls -l file_name gives file information and type.
+(stat for information of file)
+
+i-node content:
+file type
+block used (512 byte sized)
+link count
+access permission (user, group, other, sticky, uid, sgid)
+user owner id
+group owner id
+access time stamp
+modify time stamp
+change time stamp
+IN-ACCESSIBLE
+direct data block addeess
+single indirect data block adress
+double indirect data block address
+tripple indirect data block address.
+(to make a directory we use mkdir)
+
+
+18th june 2021
+
+18 june 2021
+ Command interpreter                                                 │                                                                      │···························
+  +- interprets user command into computer code                      │                                                                      │···························
+  +- provides invironemnt to the user (ENV VARS)                     │                                                                      │···························
+  +- provides                                                        │                                                                      │···························
+  |   +- built-ins (commands which are part of the shell)            │                                                                      │···························
+  |   +- user/ programming environment                               │                                                                      │···························
+  |   +- intercative and non-interactive execution                   │                                                                      │···························
+  |   +- I/O redirection and pipelining                              │                                                                      │···························
+  |   +- process management                                          │                                                                      │···························
+  +- helps running external commands (not part of shell)             │                                                                      │···························
+  bash is  an interpreter 
+interprete user command into computer code
+type command is used for built in command finding
+interactive shell-like echo
+instant action shown
+interactive shell-create script
+external commands -not part of shell
+ +- availale shells listed in /etc/shells                           │                                                                      │···························
+  +- assigned to users in /etc/passwd      
+
+where bash command is located- which bash
+$=command prompt
+ls=alias command
+-l=options
+/etc= argumnet
+to know the type og any command =type ls ,type -l
+
+startup file
+interative login shell
+  profile
+readable
+login
+logout
+
+
+interacticve non login shell
+bashrc(profile)
+
+non interactive shell
+scripts
+cron/at jobs
+
+posix comapatible mode
+profile 
+~/.profile
+
+no initialisaton files
+
+command excetuation
+bultins
+ Builtins                                                            │/usr/bin/screen                                                       │···························
+  +- Bourne shell builtins                                           │/usr/bin/tmux                                                         │···························
+  +- Bash builtins                                                   │saloni_jain@ip-172-31-32-207:~$ which bash                            │···························
+  +- POSIX builtins                                                  │/usr/bin/bash                                                         │···························
+                                                                     │saloni_jain@ip-172-31-32-207:~$ type echo                             │···························
+ External commands                                                   │echo is a shell builtin                                               │···························
+  +- Stored in filesystem in executable path (path display)                        │saloni_jain@ip-172-31-32-207:~$ type find                             │···························
+      +- $PATH has list of paths 
+alias
+
+shorthand to a command or expression
+
+fork+exec
+fork creats a new process
+exec change the process code
+
+subshell/subprocess
+each interactive command is started in a subshell
+(script requirement pr depend krta h )
+
+script excutation
+read
+tokenize(kasie sepereste krkne ah)
+parse(as it is)
+expand
+redirections(output redirect kanra h ya lena h)
+execute
+reap
+
+script terminology
+
+-variables-declare NAME
+a=10
+echo $a  ($= specify the value it contains)
+-declare can aslo be used to assign
+eg.-declare name="name"; echo $name
+
+-echo=(to print output)
+-input=command = read name
+                (reads from user)
+-if..fi=if[CI];then AI ;fi
+CI=conditional 1
+AI=action/action set 1
+
+
+jaise c mein include stdio lihte the waise hi linux mein #!/bin/bash likhenge
+
+piece code
+echo "hello world"
+
+name =$user
+echo "also ..hello $name"
+read -p "your name please:" nm
+echo "your name is $nm"
+
+echo "today is $(date)"
+
+sh helps us to open editor 
+save =ctrl+o
+exit=ctrl+x
+to ececute=bash script.sh
+-p=to make the input in next line
+to open script
+:~/temp/bash_script$
+
+another way to print the value of variable=back tick=`name`
+name is the variable
+ja bhi hum koi value ni dete vo REPLY mein chali jati h
+special variables =$(0-9)
+$1=takes first positional parameter
+same with all (1-9)
+$0=takes name of script
+comment=display ni hoga
+thiss will happen with the help of #
+to declare array=name=("$@")
+echo $@ (to display the elements)
+to display index of the no. =${name[1]}
+to count no. of arguments =$# is used
+-operators arthimetic
+v1=10
+v2=4
+r=$[$v1+$v2]
+echo $r
+output=14
+other wasys-:
+ echo $(expr $v1 + $v2)
+  r=$(( $v1+$v2 )); echo $r
+--create andd run a bash script
+ $ bash /tmp/my_ls.sh(script run hoti h and shell die ho jata h and returns a subshell
+(environemnt delete ho jata h)
+ $ chmod +x /tmp/my_ls.sh; /tmp/my_ls.sh (execuatble permission deni padegi file ko execute krwaane ko)
+(chmod +x script1.sh )=permission dedeta h execute hone ki
+(changes to environment delete ho jata h)
+ $ chmod +x /tmp/my_ls.sh; cd /tmp; ./my_ls.sh  
+(. dot command will take the file as an argument)
+ 
+19 june 2021
+linux command-:
+less than =-lt
+greater than =-gt
+if...fi(opening closing)
+then =else
+else if=elif
+loops-:
+for i in (1,2,3)
+for i in (1..10)(range from 1 to 10)
+for i in (1..10..2)(skips 2 values)
+for loop ki conditions double brackets mein deni h
+n=12
+until[ ! $n -le 10]
+do
+	echo "$n"
+	n=$((--n))
+done
+
+select loop=to construct menu in easy way 
+select fruits in orange banana kiwi
+do
+	echo "fruits"
+done
+
+functions()
+
+
+June 23, 2021
+
+Case statements
+
+Process: Programs in the execution (Almost enything which is not a file, is a process)
+
+Shell is the process we interact with.
+ Running eitors, web browsers are also processes.
+ 
+init and systemd
+
+init 
+....
+  is initial process
+  is started during the boot
+  creates other main processes in a process tree
+  Ususally has a process ID 1
+  ( swapper or sched has process ID 0 and is responsible for pagin, and is actually part of the kernel rather than normal user-mode process .)
+  init is the anscestors of all the processes in this system.
+
+systemd is modern init system
+{ try pstree -p on console)
+
+Buffering is collecting data from multiple operations before performing I/O
+
+Process table and file descriptor tables
+
+Process table
+  array of Process ID and Process Control Block tuples
+
+PCB consists of:
+Process ID, Parent process ID, process group ID, instruction pointer, Memory maps, Open file descriptors -> File descriptor table, Priority and scheduling information, Resource counters and much more.
+
+File descriptor table:
+
+Global file descriptor table (GFDT)
+It contains:
+ in-core, inode for each opened file
+ reference count for each file from PCB file descriptor table
+
+FDT1			| GFDT
+FD3:R=100, W=100:GFDT(1)| 1: fileX (2)
+FD4:R=50, W=50:GFDT(2)  | 2: fileY (1)
+    			| 3: fileZ (1)
+FDT2			|
+FD3:R=100, W=100:GFDT(3)|
+FD4:R=50, W=50:GFDT(1)  |
+
+Process creation: fork()/ exec()
+
+Process create childrem using fork() library call
+A process changesprogram text using exec library call
+Certain customizations happen between fork and exec
+	 open / close / duplicate FDs
+	 open / close duplicate pipes fds
+	 tweak environment vairable, etc.
+
+Simplified explanation for ls | sort
+
+shell creates piple (|)
+shell forks two processes
+Both processes now share the pipe
+First process
+	closes STDOUT file descriptor
+	duplicates pipe's.....(Chhoooot gaya)
+
+Process states:
+D= Uninterruptable sleep (Process aisi so gayi hai ki uthegi hi nahi kisi bhi external signal se na hi interrupt hoga, na hi execute hoga)
+I= Idle (Wait kr rha hai resources a liye)
+R= Running
+S= Sleeping
+T= stopped by job control signal.
+t= stopped by debugger during trace
+Z= zombie ( parent die but child returns a value in PCB but parent hai nahi to kaha jayegi value to process kisi aur process ko apn aparent bana leta hai!)
+
+
+25th june 2021
+
+ps-give snapshot of all the current process
+pstree-display tree of processes
+kill-9 (process id)=to kill background process
+
+USER     : Owner of the process (Effective user)                                                       
+PID      : Process ID                                                                                     
+%CPU     : cputime/ realtime ratio                                                                                                        
+%MEM     : Process's resident set size to phys. mem. ratio                                                                                 
+VSZ      : Virtual memory size on KiB (1024 byte units)                                                                                    
+RSS      : Resident Set Size (non-swapped phys. mem. in KiB)                                                                              
+TTY      : Controlling Terminal                                                                                                           
+STAT     : Process State code                                                                                                              
+START    : time when command started                                                                                                      
+TIME     : accumulated cpu time (user + system)                                                                                           
+COMMAND  : executable name  
+
+ Here are the different values that the s, stat and state           
+ output specifiers (header "STAT" or "S") will display to            
+ describe the state of a process:                                    
+      D    uninterruptible sleep (usually IO)                        
+      I    Idle kernel thread                                        
+      R    running or runnable (on run queue)                        
+      S    interruptible sleep (waiting for an event to              
+           complete)                                                 
+      T    stopped by job control signal                            
+      t    stopped by debugger during the tracing                    
+      W    paging (not valid since the 2.6.xx kernel)                
+      X    dead (should never be seen)                               
+      Z    defunct ("zombie") process, terminated but not            
+           reaped by its parent                                      
+                                                                     
+ For BSD formats and when the stat keyword is used, additional      
+ characters may be displayed:                                        
+      <    high-priority (not nice to other users)                  
+      N    low-priority (nice to other users)                       
+      L    has pages locked into memory (for real-time and           
+           custom IO)                                                
+      s    is a session leader                                      
+      l    is multi-threaded (using CLONE_THREAD, like NPTL          
+           pthreads do)                                              
+      +    is in the foreground process group     
+
+top
+uptime-length of time since last boot
+users-total number of user with active process
+load average-system load average over last 1,5,15 min
+
+task
+total=count the tasks
+running- +- total        : count of tasks/ threads in any state             
+ +- running      : count of tasks/ threads in run state              
+ +- sleeping     : count of tasks/ threads in sleep state            
+ +- stopped      : count of tasks/ threads in stop state             
+ +- zombie       : count of tasks/ threads in zombie state           
+CpuN State                                                           
+ +- us           : time running un-niced user processes              
+ +- sys          : time running kernel user processes               
+ +- ni           : time running niced user processes                 
+ +- id           : time spent in the kernel idle handler            
+ +- wa           : time waiting for I/O completion                   ·
+ +- hi           : time spent servicing hardware interrupts          
+ +- si           : time spent servicing software interrupts          
+ +- st           : time stolen from this vm by the hypervisor        
+                                                            
+  Mib Mem/ Swap                                                       
+ +- total        : Total physical memory/ Swap                      
+ +- free         : Free physical memory/ Swap                       
+ +- used         : Used physical memory/ Swap                        
+ +- buffer/cache : Memory used by IO buffers and various caches      
+ +- avail        : Estimated available memory for new processes                                                                                                           
+             
+                                                                     
+      (see FIELDS / Columns Display under OVERVIEW in man top )      
+                                                                     
+PID     : Process ID                                               
+USER    : Effective user name of the task's owner                    
+PR      : Scheduling priority of task                                
+NI      : Nice value                                                
+VIRT    : Virtual Memory size oin KiB                                
+RES     : Resident memory size (KiB)                                
+SHR     : Subset of RES shared with other processes                  
+S       : Process status                                            
+%CPU    : cpu time / total cpu time % since last refresh             
+%MEM    : resident set/ total physical memory %                     
+TIME+   : More granular CPU time                                    
+COMMAND : command name or command line  
+htop is more modern alternate
+
+COMMAND   : first 9 characters of command                            
+PID       : Process ID                                               
+TID       : Task/ Thread ID                                          
+TASKCMD   : Task command name                                        
+USER      : Usually Effective User ID or login name                  
+FD        : File descriptor number (also refer man page)             
+TYPE      : Type of node associated (also refer man page)            
+DEVICE    : Device major and minor numbers (also refer man page)     
+SIZE/OFF  : Size of file or offset in file                           
+NODE      : node number of the local file                            
+NAME      : Name of file or mount point with filesystem             
+      
+memory info with free command
++- procps : ps, top, free                                           
+ +- psmisc : pstree                                                 
+ +- htop   : htop                                                    
+ +- lsof   : lsof                                                   
+                  
+$ sudo apt install procps psmisc htop lsof  
+
+process id by $$
+ nano script8.sh  =opening script
+bash for running
+ctrl+c=intreput dene ko
+ctrl+d=stop
+
+
+26th june 2021
+message queue 
+shared memeory
+semaphores
+
+inter process communications
+ System V IPC                                                      │                                                                      │···························
+    +- Message queues                                                │                                                                      │···························
+    |  Place message on queue to be read by other processes          │                                                                      │···························
+    |  lib calls: msgget, msgsend, msgrcv, msgctl                    │                                                                      │···························
+    +- Semaphore sets                                                │                                                                      │···························
+    |  Synchronize actions across processes                          │                                                                      │···························
+    |  lib calls: semget, semop, semctl                              │                                                                      │···························
+    +- Shared memory segments                                        │                                                                      │···························
+    |  Share regions of memory across processes                      │                                                                      │···························
+    |  lib calls: shmget, shmat, shmdt, shmctl                       │                                                                      │···························
+    +- commands: ipcmk  ipcrm  ipcs                                  │                                                                      │···························
+                                                                     │                                                                      │···························
+    +- Signals                                                       │                                                                      │···························
+    |  command: kill(1), lib call: kill(2)                           │                                                                      │···························
+    +- FIFO/ named pipes                                             │                                                                      │···························
+    +- Sockets                                                       │                                                                      │···························
+    |  Single system: UNIX domain sockets                            │                                                                      │···························
+    |  Multiple systems: TCP sockets, UDP sockets, other             │                                                                      │···························
+                                                                     │
+signals-:
+asynchronus notifications among process
+handled with in process by signal handlers
+some interrupts are passed as signals to processes
+signals have default actions ,which can be over ridden
+some signals can be masked
+normally sent by kernel to process
+user defined confitions are also supported
+programming language provide features for signal handling
+FIFO-:
+ these are special files without data blocks                   │                                                                      │···························
+    +- provides bi-directional half-duplex data transfer             │                                                                      │···························
+    +- unrelated processes can use FIFO for communication            │                                                                      │···························
+    +- communication processes should be on same host                │                                                                      │···························
+    +- FIFO file names persist across host restarts                  │                                                                      │···························
+    +- FIFO data does not persist across host restarts               │                                                                      │···························
+    +-   FIFO data does not persist across host restarts
+ half duplex=can not talk simultaneously like wakie takie
+UNIX DOMAIN sockets
+enables communication on same host
+enables bi-directional full duplex communication
+provides kernal verified user/group authentication
+allows passing file descriptors across process
+supports packet oriented tranfer
+
+SOCKETS-:TCP sockets
+
+enables across host,stream oriented communication
+communication is full duplex and realibale
+no imbebed authentication supports
+no file descriptor passng is allowed
+
+                  Sockets: UDP sockets                         │                                                                      │···························
+                        ....................                         │                                                                      │···························
+                                                                     │                                                                      │···························
+    +- enables across host, packet oriented communication            │                                                                      │···························
+    +- communication is full duplex, but un-reliable                 │                                                                      │···························
+    +- no imbedded authentication support                            │                                                                      │···························
+    +- no file-descriptor passing is allowed                         │                                                                      │···························
+                                                
+                         
+                                                            │                                                                      │···························
+                    Inter process communication                      │                                                                      │···························
+                    ...........................                      │                                                                      │···························
+                                                                     │                                                                      │···························
+   System V IPC                                                      │                                                                      │···························
+    +- Message queues                                                │                                                                      │···························
+    |  Place message on queue to be read by other processes          │                                                                      │···························
+    |  lib calls: msgget, msgsend, msgrcv, msgctl                    │                                                                      │···························
+    +- Semaphore sets                                                │                                                                      │···························
+    |  Synchronize actions across processes                          │                                                                      │···························
+    |  lib calls: semget, semop, semctl                              │                                                                      │···························
+    +- Shared memory segments                                        │                                                                      │···························
+    |  Share regions of memory across processes                      │                                                                      │···························
+    |  lib calls: shmget, shmat, shmdt, shmctl                       │                                                                      │···························
+    +- commands: ipcmk  ipcrm  ipcs                                  │                                                                      │···························
+                                                                     │                                                                      │···························
+    +- Signals                                                       │                                                                      │···························
+    |  command: kill(1), lib call: kill(2)                           │                                                                      │···························
+    +- FIFO/ named pipes                                             │                                                                      │···························
+    +- Sockets                                                       │                                                                      │···························
+    |  Single system: UNIX domain sockets                            │                                                                      │···························
+    |  Multiple systems: TCP sockets, UDP sockets, other             │                                                                      │···························
+     +-files
+                                                                │                                                                      │···························
+     
+1st july 2021
+ kernel identifies by i node number
+kernel sapce-
+kernel processes
+buffers and cacje 
+	dirent cache
+	i-node cache
+	block cacje
+	i/o buffers
+and some more usages
+"sample.txt" this file will display first 10 lines of the file
+sample.txt is the name of the file
+it will look for permission and then first 10 lines will displayed
+process step by step
++- user process requests file open                              │                                                                      │···························
+     +- kernel                                                       │                                                                      │···························
+         +- converts file name to i-node with directory lookups      │                                                                      │···························
+         +- loads i-node in memory                                   │                                                                      │···························
+         +- checks permissions for requested operation               │                                                                      │···························
+         +- creates/ updates FDT and GFDT entries                    │                                                                      │···························
+         +- loads reqested data blocks in RAM                        │                                                                      │···························
+         +- periodically syncs modified i-node and data blocks       │                                                                      │···························
+             (when we write in file)                                                        │                                                                      │···························
+         +- caches dirent, i-node and data blocks in RAM             │                                                                      │···························
+         +- caching is based on usage frequency  
+
+FDT= file discriptor table
+GFDT= global file discriptor table
+
+
+MEMORY
+memory utilization to use it efficiently
+CPU connects directly to the register and cache inshort RAM
+multiprograaming so that CPU doesnt remain idel
+
+jine ki ram hoti h utne hi process aate h baki sare hard disk mein rehte h
+like hars dikah tumahri virtual memory ki trrah rehti h 
+storage limitation ke liye wory ni hona padta h
+
+RAM ki size increase hoti rahegi toh cost increase hogi
+actual load decrease ho jayegi kyunki hard disk occupy ni karegi
+
+vitual spce is virtual memory that shows how file is stored
+
+ heap space                                                       │                                                                      │···························
+     +- explicit with malloc(), new() etc. in C, C++                 │                                                                      │···························
+     +- implicit with new object creations in Perl, Python etc.      │                                                                      │···························
+     +- grows upwards to higher address ranges                       │                                                                      │···························
+                                                                     │                                                                      │···························
+    stack space                                                      │                                                                      │···························
+     +- implicit with function calls                                 │                                                                      │···························
+     +- grows downwards to lower address ranges                      │                                                                      │···························
+                                              
+kernel psace
+
+
+  Simplified view                                                  │                                                                      
+                                                                     │                                                                      
+    1 malloc(1000)                                                   │                                                                     
+    2 malloc(2000)                                                   │                                                                     
+    3 malloc(2000)                                                   │                                                                     
+    4 function1()                                                    │                                                                     
+    5 function2()                                                    │                                                                      
+                                                                     │                                                                     
+    ......|.......|  misc addresses                                  │                                                                     
+     9000 | ccccc |  program code                                    │                                                                      
+    10000 | ccccc |                                                  │                                                                      
+    ..... | ..... |                                                  │                                                                      
+    11000 | hhhhh |  malloc(1000)                                    │                                                                      
+    12000 | hhhhh |  malloc(2000)                                    │                                                                      
+    13000 | hhhhh |                                                  │                                                                      
+    14000 | hhhhh |  malloc(2000)                                    │                                                                     
+    15000 | hhhhh |                                                  │                                                                    
+    16000 | ..... |                                                  │                                                                     
+    ..... | fffff |  available virtual address range                 │                                                                      
+    ..... | ..... |                                                  │                                                                      
+    98000 | sssss |  function2                                       │                                                                      
+    99000 | sssss |  function1                                       │                                                                     
+                                      
+virtual space ka fayada ye h ki different section ke beeche file share ho sakti h
+
+system call-:
+read,write,fork,open
+kernel vo hota h jo hardware se communicate krta h
+
+strace-traces system calls and signals by a process
+ls=list
+fstat=takesthe statistics of the file
+read=file discriptor
+strace -o=open the file
+strace -e= only write wali files open hongi
+
+2nd july 2021
+lsblk=is used to return block of devices 
+change directory=cd
+/temp$ mkdir c_program  =c_program naam ki directory ban gyi
+$ nano hello.c =hello.c naam ki filw include ho gyi
+ctrl + o +entre =to save in nano
+gcc=to compile the program
+like=gcc hello.c=toh a.out se object file create hogi by deafult
+gcc hello.c -o hello.out =iss hello.out se save hogi
+to run=/temp/c_program$ ./hello.out
+-o=specifies output file name 
+o check the status og the code like if its compiled or not so 
+first compile it then
+ echo $? = is used 
+
+ +- fopen() : function to open mentioned  filename  if it exists or c│                                                                      │···························
+reate if it doesn't                                                  │                                                                      │···························
+ |  : file is searched, loaded from disk and placed in buffer        │                                                                      │···························
+    : set character pointer                                          │                                                                      │···························
+                                                                     │                                                                      │···························
+ +- mode : permissions to be granted while opening text file         │                                                                      │···························
+                                                                     │                                                                      │···························
+ +- Part of stdio.h                                                  │                                                                      │···························
+                                                                     │                                                                      │···························
+ +- Value stored in FILE type pointer                                │                                                                      │···························
+                                                                     │                                                                      │···························
+ +- Absolute path to be mentioned for filename   
+
+fclose(FILE *fp)=fp is file pointerr
+
+3rd july 2021
+#include<stdio.h>
+int main(){
+FILE *fp;
+fp=fopen("file.txt","w");
+fprintf(fp,"hello world from file");
+fclose(fp);
+return 0;
+}
+
+cat command = display the content of file
+
+malloc()=allocates memory but doesn't initialise
+calloc()=allocates memory and initialise value to the memory space
+with zero
+
+to check the memory space=free -mh 
+server kill tab hoga jb memory exhaust ho jayegi
+OOM killer disbaled=kills a process like it kills all the process and its chidl process
+ stop krne ke baaad doabra wahi se hi start ho jayega
+thats means vo deallocate ho jayega
+ server reboot krna pada toh system reboot krna padega 
+toh sab kuch dobara set up krna padega
+
+ Term   terminate the process.                                      │Mem:          1.9Gi       794Mi       958Mi       8.0Mi       207Mi   │···························
+  Ign    ignore the signal.                                          │    1.0Gi                                                             │···························
+  Core   terminate the process and dump core.                        │Swap:            0B          0B          0B                           │···························
+  Stop   stop the process.                                           │saloni_jain@ip-172-31-32-207:~$ free -mh                              │···························
+  Cont   continue the process if it is currently stopped.            │              total        used        free      shared  buff/cache   │···························
+                                                            
+additon.sh = se script bn jaygei
+
+9th 07 2021
+router-to connect two diffent networks
+physical layer,datalink layaer,networking layer
+
+filtering - isp(internet serive protocol)
+arp request send karnege tab ip address store hota h
+
+routerr mein collinsion ni hota h
+lekin hub mein hota h collision
+
+hub ek hi layer ko work krta h
+
+repeater ki funtioning-geneterates the strenth of orginal 
+signal like maintain krta h
+ amplifer ni  h ye kyunki amplifyier amplify krta h lekin 
+repeater kevel regenrate krta h
+
+gateway-disssimialr network ko connect krne ko
+LAN ,WAN ,MAN,
+switch ki trah hogi
+
+writng protocol- konse distance se travel krna h
+c
+konnse path se min time lagega
+internal gateay protocol-:
+distance protocol-minimum distance find krne ko
+
+external gateway protocols-:jo bhr ke network dete h
+
+we should have a web server to be able toh host a web site
+ Serve websites on internet                                                                                                              │···························
+ +- Serve many clients/users at the same time                                                                                               │···························
+ +- Establish client (browser) and server (web content) connection                                                                          │···························
+ +- HTTP : Hypertext Transfer Protocol                                                                                                      │···························
+ +- Protocol to transfer data from web server to any client  
+apache:web server
+it runs HTT and HTTPsdd=
+softwareto eastablish
+client->
+ sudo systemct1 start apache 2.service(shows the status)
+ps aux (running process)
+ps aux| grep 609(runnung specific file 
+sudo netstat -tlpn(network statistics show krta h)
+
+mc command-particular port pr connection check krte h
+n
+nc=net cat
+ nc -vz (then port number)
+ are u open or not
+stop se stop ho jayenge
+sudo apt install apache2
+
+to install
+netstat -tlpm
+(to check the statsu)
+	
+multi processing modules-three types
+cero
+pgork,
+to checkc the verrsion
+apanchepa:command,
+
+ping=package internet network growth
+request jayegi phir ayegi usme kinta time lagega
+
+mtr=statsitics aa jati h
+
+host= ip address aa jata h
+host=ping
+ping=straight
+ip route commanad=shows the routing table
+
+
+10th july 2021
+
+what is cloud computing
+as per AWS 
+on demand delivery of IT resorces over the internet
+pay as you go picing
+
+ As per Azure                                                        │                                                                      │···························
+  +- delivery of computing services including                        │                                                                      │···························
+  |   +- servers,                                                    │                                                                      │···························
+  |   +- storage,                                                    │                                                                      │···························
+  |   +- databases,                                                  │                                                                      │···························
+  |   +- networking,                                                 │                                                                      │···························
+  |   +- software,                                                   │                                                                      │···························
+  |   +- analytics, and                                              │                                                                      │···························
+  |   +- intelligence                                                │                                                                      │···························
+  |      over the Internet (“the cloud”)                             │                                                                      │···························
+  +- offering                                                        │                                                                      │···························
+      +- faster innovation,                                          │                                                                      │···························
+      +- flexible resources, and                                     │                                                                      │···························
+      +- economies of scale (100 of items on one go so its easy)
+why we need cloud computing
+speed 
+productivity
+reliability
+cost/price(jab jayda use ho tab jadya speed dedo warna thoda hi rehne do)
+global
+performance
+security
+  
+judiciously use means-sabko sahi trah se mile
+
+players
+public clouds-
+AWS(amzon web serives)
+azure
+GCP
+digital ocean
+OCI
+
+private-
+openshift
+IBM
+VMWare
+citrix
+
+tools needed
+-AWS CLI
+-Terraaform
+-SSH client, application clients
+
+SETTING UP TOOLS
+
+install terrform
+
+ mkdir -p bin/.terraform                                             │                                                                      │···························
+ TERRAFORM_VERSION=1.0.1                                             │                                                                      │···························
+ wget https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}\ │                                                                      │···························
+/terraform_${TERRAFORM_VERSION}_linux_amd64.zip                      │                                                                      │···························
+                                                                     │                                                                      │···························
+ unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip                │                                                                      │···························
+ chmod +x terraform                                                  │                                                                      │···························
+ mv terraform bin/.terraform/terraform_v${TERRAFORM_VERSION}         │                                                                      │···························
+ ln -snf ~/bin/.terraform/terraform_v${TERRAFORM_VERSION} \          │                                                                      │···························
+ ~/bin/terraform                              
+
+AWS CLI client
+ install
+ sudo pip install awscli                                             │                                                                      │···························
+ sudo apt-get install python python-pip       
+
+configure
+aws configure                                                       │workdocs                                 | worklink                   │···························
+ AWS Access Key ID [None]: AKIAVWUZOFQDEEO6SHEV                      │                                                                      │···························
+ AWS Secret Access Key [None]: 7erAQGxxxxxxxxxxyyyyyyyyyyyyy         │workmail                                 | workspaces                 │···························
+ Default region name [None]: ap-south-1                              │                                                                      │···························
+ Default output format [None]: 
+
+15th july 2021
+movement controls-
+j=to go down
+k=to go up
+h=to go left
+l=to go left
+to enable insert mode press i
+i for =insert mode
+esc press krne se hum normal mode pr aa jayenge
+copy krne ke liye v press krna h in normal mode
+yani esc key press krke v press krnah sopy krne ko
+v=select krna h
+y=copy kia h
+p=paste kia h
+:put se bhi paste ho jata h
+mode change kasise krna h
+i=insert krennge
+
+to delete particular numbe of lines 
+eg
+4 bd
+undo= u se undo ho jata h
+we have to search a word=/word to search
+ctrl +f se search rkte h in file not in linux
+normal mode mein jake * press krne se jis word pr cursor hoga vo kitni baar h
+vo pata chal jayega
+n se hum upr neeche kr sakte h
+:%s/first/second
+isse jo word chaiye vo dusre word se replace ho jata h
+jasie first secnd se ho gya
+
+agr hame kisi specific jagh pr replace krnaho toh
+:%s/vim/editor
+m 
+save kasie hota h-:wq(w=write q=quiet)
+dusri file kasie kholna h
+:split/seconf file
+ctrl+w=arrow keys use krteh
+q
+quite hota h
+vim tutor likhnah 
+phir us,experiment
+
+- /usr/share/vim/vimrc                                             │sanyam_1900290110092      :  Jul 15 11:32                             │···························
+ |  System wide Vim initializations                                  │shivam_1900290130153      :  Jul 15 11:33                             │···························
+ +- ~/.vimrc                                                         │shivam_1900290310151      :  Jul 15 11:31                             │···························
+    personal gvim initializations                                    │tushar_1900290110120      :  Jul 15 11:32                             │···························
+                                                                     │yashashvi_1900290110133   :  Jul 15 11:33                             │···························
+ +- /usr/share/vim/gvimrc                                            │saloni_jain@ip-172-31-32-207:~$ cd temp/vim_learning/                 │···························
+ |  System wide Vim initializations                                  │saloni_jain@ip-172-31-32-207:~/temp/vim_learning$ vim firstfile       │···························
+ +- ~/.gvimrc                                                        │saloni_jain@ip-172-31-32-207:~/temp/vim_learning$ vim firstfile       │···························
+    personal gvim initializations                                    │saloni_jain@ip-172-31-32-207:~/temp/vim_learning$ vim firstfile       │···························
+                                   
+ +- "                                                                │shivam_1900290130153      :  Jul 15 11:33                             │···························
+ |  comment a line in vimrc                                          │shivam_1900290310151      :  Jul 15 11:31                             │···························
+ +- syntax on                                                        │tushar_1900290110120      :  Jul 15 11:32                             │···························
+ |  enable syntax highlighting                                       │yashashvi_1900290110133   :  Jul 15 11:33                             │···························
+ +- iabbrev kiet KIET                                                │saloni_jain@ip-172-31-32-207:~$ cd temp/vim_learning/                 │···························
+ |  add abbreviations                                                │saloni_jain@ip-172-31-32-207:~/temp/vim_learning$ vim firstfile       │···························
+ +- set number                                                       │saloni_jain@ip-172-31-32-207:~/temp/vim_learning$ vim firstfile       │···························
+ |  show line numbers in buffer                                      │saloni_jain@ip-172-31-32-207:~/temp/vim_learning$ vim firstfile       │···························
+ +- colorscheme darkblue                                             │saloni_jain@ip-172-31-32-207:~/temp/vim_learning$ vim firstfile       │···························
+    change color scheme to darkblue 
+
+to replace a word with other 
+example-:
+abbrev CS computerscience
+
+":set hlsearch
+/is "
+isse aappki file mein khiabbhi is hoga vo higligt ho jayega
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                             
